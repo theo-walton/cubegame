@@ -43,7 +43,7 @@ export default class Viewport extends Vue {
     });
 
     // Configure renderer clear color
-    this.renderer.setClearColor("#0000ff");
+    this.renderer.setClearColor("#aaddff");
 
     // Configure renderer size
     this.renderer.setSize( window.innerWidth, window.innerHeight );
@@ -59,22 +59,24 @@ export default class Viewport extends Vue {
 
   initializeScene(): void {
     // add lighting
-    const ambient = new AmbientLight(0x404040);
+    const ambient = new AmbientLight(0x777777);
     this.scene.add(ambient);
-    const point = new PointLight(0xffffff, 1, 100);
-    point.position.set(10, 10, 10);
-    this.scene.add(point);
+
+    const point1 = new PointLight(0xffffff, 1, 100);
+    point1.position.set(10, 10, 10);
+    this.scene.add(point1);
 
     this.cube = new Cube();
 
     this.scene.add(this.cube.group);
+    console.log(this.scene);
   }
 
   gameLoop(): void {
     this.renderer.render(this.scene, this.camera);
 
     this.cube.group.rotation.x += 0.01;
-    this.cube.group.rotation.y += 0.01;
+    this.cube.group.rotation.y += 0.02;
 
     requestAnimationFrame(this.gameLoop);
   }
