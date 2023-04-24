@@ -18,6 +18,7 @@ PointLight,
 MeshPhongMaterial,
 } from "three";
 import { Cube } from "./cube";
+import { Mouse } from "./mouse";
 
 @Options({
 })
@@ -28,6 +29,7 @@ export default class Viewport extends Vue {
 
   // temp
   cube!: Cube;
+  mouse!: Mouse;
 
   mounted() {
     this.scene = new Scene();
@@ -53,6 +55,9 @@ export default class Viewport extends Vue {
 
     this.initializeScene();
 
+    // initialize mouse event handler
+    this.mouse = new Mouse(window);
+
     // start game loop
     requestAnimationFrame(this.gameLoop);
   }
@@ -77,6 +82,8 @@ export default class Viewport extends Vue {
 
     this.cube.group.rotation.x += 0.01;
     this.cube.group.rotation.y += 0.02;
+
+    this.cube.raycastCube(this.mouse.normalizedPosition, this.camera);
 
     requestAnimationFrame(this.gameLoop);
   }
