@@ -23,4 +23,11 @@ nav a {
 nav a.router-link-exact-active {
   color: #42b983;
 }
+html {
+  overflow-y: auto !important;
+}
+
+* {
+  font-family: "Brush Script MT", cursive;
+}
 </style>

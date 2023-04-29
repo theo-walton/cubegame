@@ -1,4 +1,22 @@
-import { BackSide, BoxGeometry, BufferGeometry, Camera, Color, ColorRepresentation, DoubleSide, Float32BufferAttribute, FrontSide, Group, Mesh, MeshBasicMaterial, MeshPhongMaterial, Raycaster, Scene, Vector2, Vector3 } from "three";
+import {
+  BackSide,
+  BoxGeometry,
+  BufferGeometry,
+  Camera,
+  Color,
+  ColorRepresentation,
+  DoubleSide,
+  Float32BufferAttribute,
+  FrontSide,
+  Group,
+  Mesh,
+  MeshBasicMaterial,
+  MeshPhongMaterial,
+  Raycaster,
+  Scene,
+  Vector2,
+  Vector3,
+} from "three";
 
 export class Cube {
   group: Group;
@@ -7,7 +25,8 @@ export class Cube {
     this.group = new Group();
     this.group.name = "the cube";
 
-    this.makeFace([
+    this.makeFace(
+      [
         new Vector3(1, -1, 1),
         new Vector3(1, 1, 1),
         new Vector3(-1, -1, 1),
@@ -16,10 +35,11 @@ export class Cube {
         new Vector3(-1, -1, 1),
       ],
       "red",
-      "red",
+      "red"
     );
 
-    this.makeFace([
+    this.makeFace(
+      [
         new Vector3(1, 1, -1),
         new Vector3(1, -1, -1),
         new Vector3(-1, -1, -1),
@@ -28,10 +48,11 @@ export class Cube {
         new Vector3(-1, 1, -1),
       ],
       "blue",
-      "blue",
+      "blue"
     );
 
-    this.makeFace([
+    this.makeFace(
+      [
         new Vector3(-1, 1, 1),
         new Vector3(-1, 1, -1),
         new Vector3(-1, -1, -1),
@@ -40,10 +61,11 @@ export class Cube {
         new Vector3(-1, -1, 1),
       ],
       "green",
-      "green",
+      "green"
     );
 
-    this.makeFace([
+    this.makeFace(
+      [
         new Vector3(1, 1, 1),
         new Vector3(1, -1, -1),
         new Vector3(1, 1, -1),
@@ -52,10 +74,11 @@ export class Cube {
         new Vector3(1, -1, -1),
       ],
       "yellow",
-      "yellow",
+      "yellow"
     );
 
-    this.makeFace([
+    this.makeFace(
+      [
         new Vector3(1, 1, 1),
         new Vector3(1, 1, -1),
         new Vector3(-1, 1, -1),
@@ -64,10 +87,11 @@ export class Cube {
         new Vector3(-1, 1, 1),
       ],
       "white",
-      "white",
+      "white"
     );
 
-    this.makeFace([
+    this.makeFace(
+      [
         new Vector3(1, -1, 1),
         new Vector3(-1, -1, -1),
         new Vector3(1, -1, -1),
@@ -76,14 +100,17 @@ export class Cube {
         new Vector3(-1, -1, -1),
       ],
       "black",
-      "black",
+      "black"
     );
   }
 
   makeFace(points: Vector3[], color: ColorRepresentation, name: string) {
     const buffer = new BufferGeometry().setFromPoints(points);
     buffer.computeVertexNormals();
-    const mesh = new Mesh(buffer, new MeshPhongMaterial({ color: color, side: FrontSide}));
+    const mesh = new Mesh(
+      buffer,
+      new MeshPhongMaterial({ color: color, side: FrontSide })
+    );
     mesh.name = name;
     this.group.add(mesh);
   }

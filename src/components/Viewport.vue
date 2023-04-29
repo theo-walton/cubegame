@@ -1,8 +1,7 @@
 <template>
-  <canvas id="Viewport" class="viewport">
-  </canvas>
+  <canvas id="Viewport" class="viewport" style="z-index: -1"> </canvas>
 </template>
-  
+
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import {
@@ -12,16 +11,15 @@ import {
   BoxGeometry,
   MeshBasicMaterial,
   Mesh,
-Object3D,
-AmbientLight,
-PointLight,
-MeshPhongMaterial,
+  Object3D,
+  AmbientLight,
+  PointLight,
+  MeshPhongMaterial,
 } from "three";
 import { Cube } from "./cube";
 import { Mouse } from "./mouse";
 
-@Options({
-})
+@Options({})
 export default class Viewport extends Vue {
   renderer!: WebGLRenderer;
   scene!: Scene;
@@ -35,7 +33,12 @@ export default class Viewport extends Vue {
     this.scene = new Scene();
 
     // Create a basic perspective camera
-    this.camera = new PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+    this.camera = new PerspectiveCamera(
+      75,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      1000
+    );
     this.camera.position.z = 4;
 
     // Create a renderer with Antialiasing
@@ -48,10 +51,10 @@ export default class Viewport extends Vue {
     this.renderer.setClearColor("#aaddff");
 
     // Configure renderer size
-    this.renderer.setSize( window.innerWidth, window.innerHeight );
+    this.renderer.setSize(window.innerWidth, window.innerHeight);
 
     // Append Renderer to DOM
-    document.body.appendChild( this.renderer.domElement );
+    document.body.appendChild(this.renderer.domElement);
 
     this.initializeScene();
 
@@ -87,9 +90,9 @@ export default class Viewport extends Vue {
 
     requestAnimationFrame(this.gameLoop);
   }
-};
+}
 </script>
-  
+
 <style scoped>
 .viewport {
   top: 0px;
@@ -99,4 +102,3 @@ export default class Viewport extends Vue {
   position: absolute;
 }
 </style>
-  
