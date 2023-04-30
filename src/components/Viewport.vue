@@ -24,6 +24,7 @@ export default class Viewport extends Vue {
   renderer!: WebGLRenderer;
   scene!: Scene;
   camera!: PerspectiveCamera;
+  lastFrameTimeMs: number = 0;
 
   // temp
   cube!: Cube;
@@ -61,7 +62,12 @@ export default class Viewport extends Vue {
     // initialize mouse event handler
     this.mouse = new Mouse(window);
 
+    window.addEventListener("mouseup", () => {
+      this.cube.raycastCube(this.mouse.normalizedPosition, this.camera);
+    });
+
     // start game loop
+    this.lastFrameTimeMs = performance.now();
     requestAnimationFrame(this.gameLoop);
   }
 
@@ -81,13 +87,12 @@ export default class Viewport extends Vue {
   }
 
   gameLoop(): void {
+    const nowMs = performance.now();
+    const dt = nowMs - this.lastFrameTimeMs;
+    this.cube.tick();
     this.renderer.render(this.scene, this.camera);
 
-    this.cube.group.rotation.x += 0.01;
-    this.cube.group.rotation.y += 0.02;
-
-    this.cube.raycastCube(this.mouse.normalizedPosition, this.camera);
-
+    this.lastFrameTimeMs = nowMs;
     requestAnimationFrame(this.gameLoop);
   }
 }
