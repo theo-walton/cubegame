@@ -18,13 +18,14 @@ import {
 } from "three";
 import { Cube } from "./cube";
 import { Mouse } from "./mouse";
+import { Renderer } from "./renderer";
 
 @Options({})
 export default class Viewport extends Vue {
-  renderer!: WebGLRenderer;
+  renderer!: Renderer;
   scene!: Scene;
   camera!: PerspectiveCamera;
-  lastFrameTimeMs: number = 0;
+  lastFrameTimeMs = 0;
 
   // temp
   cube!: Cube;
@@ -43,19 +44,9 @@ export default class Viewport extends Vue {
     this.camera.position.z = 4;
 
     // Create a renderer with Antialiasing
-    this.renderer = new WebGLRenderer({
-      antialias: true,
-      canvas: document.getElementById("Viewport") as any,
-    });
-
-    // Configure renderer clear color
-    this.renderer.setClearColor("#aaddff");
-
-    // Configure renderer size
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
-
-    // Append Renderer to DOM
-    document.body.appendChild(this.renderer.domElement);
+    this.renderer = new Renderer(
+      document.getElementById("Viewport") as HTMLElement
+    );
 
     this.initializeScene();
 

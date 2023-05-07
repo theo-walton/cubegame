@@ -1,4 +1,4 @@
-import { Ref, ref } from 'vue'
+import { Ref, ref } from "vue";
 
 interface Primitives {
   red: number;
@@ -7,11 +7,11 @@ interface Primitives {
   yellow: number;
   white: number;
   black: number;
-};
+}
 
 interface State {
   primitives: Primitives;
-};
+}
 
 function defaultState(): State {
   return {
@@ -23,7 +23,7 @@ function defaultState(): State {
       white: 0,
       black: 0,
     },
-  }
+  };
 }
 
 export class StateManager {
@@ -32,7 +32,7 @@ export class StateManager {
   get state(): State {
     return this._state.value;
   }
-};
+}
 
 const state = new StateManager();
 export default state;

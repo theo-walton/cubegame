@@ -121,11 +121,13 @@ export class Cube {
   }
 
   private applyForceToCube(position: Vector3) {
-    console.log(position);
     // NOTE: cube is centered at origin
     // NOTE: Z axis goes into the screen, Y is up
-    const factor = 100;
-    const rotationPower = new Quaternion().setFromAxisAngle(new Vector3(-position.y, position.x).normalize(), factor);
+    const factor = 1;
+    const rotationPower = new Quaternion().setFromAxisAngle(
+      new Vector3(-position.y, position.x).normalize(),
+      factor * new Vector2(position.x, position.y).length()
+    );
     this.rotationVelocity.slerp(rotationPower, 0.5);
   }
 
@@ -137,14 +139,17 @@ export class Cube {
     const stopThreshold = 1;
     const angleToStopped = this.rotationVelocity.angleTo(new Quaternion());
     if (angleToStopped < stopThreshold) {
-      const dampeningEffect = Math.pow((stopThreshold - angleToStopped) / stopThreshold, 1000);
+      const dampeningEffect = Math.pow(
+        (stopThreshold - angleToStopped) / stopThreshold,
+        1000
+      );
       this.rotationVelocity.slerp(new Quaternion(), dampeningEffect);
     }
 
     // rotate cube based on rotation velocity
-    this.group.quaternion.copy(this.rotationVelocity.clone().multiply(this.group.quaternion)).normalize();
-    // const matrix = new Matrix4().makeRotationFromQuaternion(this.rotationVelocity).multiply(this.group.matrix);
-    // this.group.setRotationFromMatrix(matrix);
+    this.group.quaternion
+      .copy(this.rotationVelocity.clone().multiply(this.group.quaternion))
+      .normalize();
   }
 
   raycastCube(normalizedPosition: Vector2, camera: Camera): void {
