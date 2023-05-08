@@ -14,6 +14,14 @@
         {{ amount }}
       </v-col>
     </v-row>
+    <v-row>
+      <v-col>
+        Spin Speed
+      </v-col>
+      <v-col>
+        {{  speed }}
+      </v-col>
+    </v-row>
   </v-card>
 </template>
 
@@ -26,6 +34,10 @@ export default class MainUI extends Vue {
   get resources() {
     console.log("resources getter called");
     return stateManager.state.primitives;
+  }
+
+  get speed() {
+    return stateManager.state.cubeProperties.spinSpeed;
   }
 }
 </script>

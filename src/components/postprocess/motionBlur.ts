@@ -35,13 +35,14 @@ function makePostProcessMaterial(): RawShaderMaterial {
   precision highp float;
   uniform sampler2D uSceneNew;
   uniform sampler2D uSceneOld;
+  uniform float uBlurAmount;
   uniform vec2 uResolution;
   void main() {
     vec2 uv = gl_FragCoord.xy / uResolution.xy;
     vec3 newColor = texture2D(uSceneNew, uv).rgb;
     vec3 oldColor = texture2D(uSceneOld, uv).rgb;
 
-    gl_FragColor = vec4(mix(newColor, oldColor, 0.99), 1.0);
+    gl_FragColor = vec4(mix(newColor, oldColor, uBlurAmount), 1.0);
   }`;
 
   const material = new RawShaderMaterial({
@@ -51,6 +52,7 @@ function makePostProcessMaterial(): RawShaderMaterial {
       uSceneNew: { value: new Texture() },
       uSceneOld: { value: new Texture() },
       uResolution: { value: new Vector2() },
+      uBlurAmount: { value: 0.9 },
     },
   });
   return material;
@@ -84,6 +86,10 @@ export class MotionBlur {
     if (resolution) {
       this.material.uniforms.uResolution.value = resolution;
     }
+  }
+
+  applyBlurAmount(amount: number) {
+    this.material.uniforms.uBlurAmount.value = amount;
   }
 
   getScene() {

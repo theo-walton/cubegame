@@ -1,4 +1,5 @@
 import { Ref, ref } from "vue";
+import { Quaternion } from "three";
 
 interface Primitives {
   red: number;
@@ -9,8 +10,13 @@ interface Primitives {
   black: number;
 }
 
+interface CubeProperties {
+  spinSpeed: number;
+}
+
 interface State {
   primitives: Primitives;
+  cubeProperties: CubeProperties;
 }
 
 function defaultState(): State {
@@ -23,6 +29,9 @@ function defaultState(): State {
       white: 0,
       black: 0,
     },
+    cubeProperties: {
+      spinSpeed: 0,
+    }
   };
 }
 

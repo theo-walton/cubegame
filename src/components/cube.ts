@@ -123,7 +123,7 @@ export class Cube {
   private applyForceToCube(position: Vector3) {
     // NOTE: cube is centered at origin
     // NOTE: Z axis goes into the screen, Y is up
-    const factor = 1;
+    const factor = 10
     const rotationPower = new Quaternion().setFromAxisAngle(
       new Vector3(-position.y, position.x).normalize(),
       factor * new Vector2(position.x, position.y).length()
@@ -145,6 +145,8 @@ export class Cube {
       );
       this.rotationVelocity.slerp(new Quaternion(), dampeningEffect);
     }
+
+    stateManager.state.cubeProperties.spinSpeed = angleToStopped;
 
     // rotate cube based on rotation velocity
     this.group.quaternion

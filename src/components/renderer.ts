@@ -24,6 +24,7 @@ import {
 } from "three";
 import { TextureToScene } from "@/components/postprocess/noChange";
 import { MotionBlur } from "@/components/postprocess/motionBlur";
+import stateManager from "@/store/state";
 
 export class Renderer {
   renderer: WebGLRenderer;
@@ -85,6 +86,9 @@ export class Renderer {
     this.renderer.render(scene, camera);
 
     // blend old frame and previous frame into new texture
+    const speed = stateManager.state.cubeProperties.spinSpeed;
+    const blurAmount = speed / (0.1 + speed);
+    this.motionBlur.applyBlurAmount(blurAmount);
     this.motionBlur.applyTextures(this.renderTarget.texture, this.previousTarget.texture ?? new Texture(), resolution);
     this.renderer.setRenderTarget(this.tempTarget);
     this.renderer.render(this.motionBlur.getScene(), camera);
