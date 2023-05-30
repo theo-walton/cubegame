@@ -22,9 +22,18 @@ import {
   Vector3,
 } from "three";
 import stateManager from "@/store/state";
+import {
+  Spin,
+  applyDynamicDrag,
+  applyStaticDrag,
+  combineSpin,
+  getSpinQuaternion,
+  makeSpin,
+} from "@/math/rotation";
+
 export class Cube {
   group: Group;
-  rotationVelocity: Quaternion = new Quaternion();
+  spin: Spin = makeSpin();
 
   constructor() {
     this.group = new Group();
@@ -123,34 +132,32 @@ export class Cube {
   private applyForceToCube(position: Vector3) {
     // NOTE: cube is centered at origin
     // NOTE: Z axis goes into the screen, Y is up
-    const factor = 10
-    const rotationPower = new Quaternion().setFromAxisAngle(
-      new Vector3(-position.y, position.x).normalize(),
-      factor * new Vector2(position.x, position.y).length()
-    );
-    this.rotationVelocity.slerp(rotationPower, 0.5);
+    const spinFactor = 0.01;
+
+    this.spin = combineSpin(this.spin, {
+      direction: new Vector2(position.x, position.y).multiplyScalar(spinFactor),
+    });
   }
 
   // TODO: make this based on frame rate?
   tick() {
-    this.rotationVelocity.slerp(new Quaternion(), 0.01).normalize();
+    this.spin = applyStaticDrag(
+      this.spin,
+      stateManager.state.cubeProperties.staticDrag
+    );
 
-    // apply extra dampening if moving slow
-    const stopThreshold = 1;
-    const angleToStopped = this.rotationVelocity.angleTo(new Quaternion());
-    if (angleToStopped < stopThreshold) {
-      const dampeningEffect = Math.pow(
-        (stopThreshold - angleToStopped) / stopThreshold,
-        1000
-      );
-      this.rotationVelocity.slerp(new Quaternion(), dampeningEffect);
-    }
+    this.spin = applyDynamicDrag(
+      this.spin,
+      stateManager.state.cubeProperties.dynamicDrag
+    );
 
-    stateManager.state.cubeProperties.spinSpeed = angleToStopped;
+    stateManager.state.cubeProperties.spinSpeed = this.spin.direction.length();
 
     // rotate cube based on rotation velocity
+    const rotation = getSpinQuaternion(this.spin);
+
     this.group.quaternion
-      .copy(this.rotationVelocity.clone().multiply(this.group.quaternion))
+      .copy(rotation.multiply(this.group.quaternion))
       .normalize();
   }
 
@@ -163,22 +170,22 @@ export class Cube {
       const name = intersects[0].object.name;
       switch (name) {
         case "red":
-          stateManager.state.primitives.red += 1;
+          stateManager.state.currency.red += 1;
           break;
         case "blue":
-          stateManager.state.primitives.blue += 1;
+          stateManager.state.currency.blue += 1;
           break;
         case "green":
-          stateManager.state.primitives.green += 1;
+          stateManager.state.currency.green += 1;
           break;
         case "yellow":
-          stateManager.state.primitives.yellow += 1;
+          stateManager.state.currency.yellow += 1;
           break;
         case "white":
-          stateManager.state.primitives.white += 1;
+          stateManager.state.currency.white += 1;
           break;
         case "black":
-          stateManager.state.primitives.black += 1;
+          stateManager.state.currency.black += 1;
           break;
         default:
           console.error("unsupported raycast type");

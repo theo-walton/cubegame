@@ -24,15 +24,14 @@ import {
 } from "three";
 
 function makePostProcessMaterial(): RawShaderMaterial {
-  const vertexShader = /* glsl */`
+  const vertexShader = /* glsl */ `
   precision highp float;
   attribute vec2 position;
   void main() {
     gl_Position = vec4(position, 1.0, 1.0);
   }`;
-  
 
-  const fragmentShader = /* glsl */`
+  const fragmentShader = /* glsl */ `
   precision highp float;
   uniform sampler2D uTexture;
   uniform vec2 uResolution;
@@ -61,17 +60,13 @@ export class TextureToScene {
     const postProcessScene = new Scene();
 
     const geometry = new BufferGeometry();
-    const vertices = new Float32Array([
-      -1.0, -1.0,
-      3.0, -1.0,
-      -1.0, 3.0
-    ]);
-    geometry.setAttribute('position', new BufferAttribute(vertices, 2));
+    const vertices = new Float32Array([-1.0, -1.0, 3.0, -1.0, -1.0, 3.0]);
+    geometry.setAttribute("position", new BufferAttribute(vertices, 2));
     this.material = makePostProcessMaterial();
     const triangle = new Mesh(geometry, this.material);
     triangle.frustumCulled = false;
     postProcessScene.add(triangle);
-  
+
     this.scene = postProcessScene;
   }
 

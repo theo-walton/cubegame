@@ -66,21 +66,21 @@ export class MotionBlur {
     const postProcessScene = new Scene();
 
     const geometry = new BufferGeometry();
-    const vertices = new Float32Array([
-      -1.0, -1.0,
-      3.0, -1.0,
-      -1.0, 3.0
-    ]);
-    geometry.setAttribute('position', new BufferAttribute(vertices, 2));
+    const vertices = new Float32Array([-1.0, -1.0, 3.0, -1.0, -1.0, 3.0]);
+    geometry.setAttribute("position", new BufferAttribute(vertices, 2));
     this.material = makePostProcessMaterial();
     const triangle = new Mesh(geometry, this.material);
     triangle.frustumCulled = false;
     postProcessScene.add(triangle);
-  
+
     this.scene = postProcessScene;
   }
 
-  applyTextures(newTexture: Texture, oldTexture: Texture, resolution?: Vector2) {
+  applyTextures(
+    newTexture: Texture,
+    oldTexture: Texture,
+    resolution?: Vector2
+  ) {
     this.material.uniforms.uSceneNew.value = newTexture;
     this.material.uniforms.uSceneOld.value = oldTexture;
     if (resolution) {

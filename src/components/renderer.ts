@@ -40,7 +40,7 @@ export class Renderer {
   constructor(canvas: HTMLElement) {
     // Create a renderer with Antialiasing
     this.renderer = new WebGLRenderer({
-      antialias: true,
+      antialias: false,
       canvas: canvas,
     });
     document.body.appendChild(this.renderer.domElement);
@@ -50,8 +50,11 @@ export class Renderer {
 
     // Configure renderer size
     this.renderer.setSize(window.innerWidth, window.innerHeight);
-
-
+    this.renderer.setDrawingBufferSize(
+      window.innerWidth,
+      window.innerHeight,
+      2
+    );
 
     // make the render targets
     const resolution = new Vector2();
@@ -70,10 +73,13 @@ export class Renderer {
       params
     );
 
-    this.previousTarget = new WebGLRenderTarget(resolution.x, resolution.y, params);
+    this.previousTarget = new WebGLRenderTarget(
+      resolution.x,
+      resolution.y,
+      params
+    );
 
     this.tempTarget = new WebGLRenderTarget(resolution.x, resolution.y, params);
-
   }
 
   render(scene: Scene, camera: Camera) {
@@ -89,18 +95,20 @@ export class Renderer {
     const speed = stateManager.state.cubeProperties.spinSpeed;
     const blurAmount = speed / (0.1 + speed);
     this.motionBlur.applyBlurAmount(blurAmount);
-    this.motionBlur.applyTextures(this.renderTarget.texture, this.previousTarget.texture ?? new Texture(), resolution);
+    this.motionBlur.applyTextures(
+      this.renderTarget.texture,
+      this.previousTarget.texture ?? new Texture(),
+      resolution
+    );
     this.renderer.setRenderTarget(this.tempTarget);
     this.renderer.render(this.motionBlur.getScene(), camera);
-
 
     // render texture to screen
     this.textureToScene.applyTexture(this.tempTarget.texture, resolution);
     this.renderer.setRenderTarget(null);
     this.renderer.render(this.textureToScene.getScene(), camera);
 
-
-    let temp__DO_NOT_USE_OR_GET_FIRED = this.previousTarget;
+    const temp__DO_NOT_USE_OR_GET_FIRED = this.previousTarget;
     this.previousTarget = this.tempTarget;
     this.tempTarget = temp__DO_NOT_USE_OR_GET_FIRED;
   }

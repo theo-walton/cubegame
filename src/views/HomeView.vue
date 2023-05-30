@@ -1,6 +1,7 @@
 <template>
   <div>
     <MainUI />
+    <UpgradeUI />
     <Viewport />
   </div>
 </template>
@@ -9,11 +10,13 @@
 import { Options, Vue } from "vue-class-component";
 import Viewport from "@/components/Viewport.vue";
 import MainUI from "@/components/MainUI.vue";
+import UpgradeUI from "@/components/upgrades/UpgradeUI.vue";
 
 @Options({
   components: {
     Viewport,
     MainUI,
+    UpgradeUI,
   },
 })
 export default class HomeView extends Vue {}

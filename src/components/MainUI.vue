@@ -15,13 +15,13 @@
       </v-col>
     </v-row>
     <v-row>
+      <v-col> Spin Speed </v-col>
       <v-col>
-        Spin Speed
-      </v-col>
-      <v-col>
-        {{  speed }}
+        {{ speed.toFixed(3) }}
       </v-col>
     </v-row>
+    <v-text-field v-model="staticDrag" />
+    <v-text-field v-model="dynamicDrag" />
   </v-card>
 </template>
 
@@ -33,11 +33,27 @@ import stateManager from "@/store/state";
 export default class MainUI extends Vue {
   get resources() {
     console.log("resources getter called");
-    return stateManager.state.primitives;
+    return stateManager.state.currency;
   }
 
   get speed() {
     return stateManager.state.cubeProperties.spinSpeed;
+  }
+
+  get staticDrag(): number {
+    return stateManager.state.cubeProperties.staticDrag;
+  }
+
+  set staticDrag(value: number) {
+    stateManager.state.cubeProperties.staticDrag = value;
+  }
+
+  get dynamicDrag(): number {
+    return stateManager.state.cubeProperties.dynamicDrag;
+  }
+
+  set dynamicDrag(value: number) {
+    stateManager.state.cubeProperties.dynamicDrag = value;
   }
 }
 </script>
