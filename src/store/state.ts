@@ -25,9 +25,22 @@ interface CubeProperties {
   dynamicDrag: number;
 }
 
-interface Upgrades {}
+interface Combo {
+  totalCombo: number;
+}
 
-interface State {
+interface SpeedBonus {
+  multiplier: number;
+}
+
+interface Upgrades {
+  choices: number[];
+  clickPower: number;
+  combo?: Combo;
+  speedBonus?: SpeedBonus;
+}
+
+export interface State {
   currency: Currency;
   cubeProperties: CubeProperties;
   upgrades: Upgrades;
@@ -45,10 +58,13 @@ function defaultState(): State {
     },
     cubeProperties: {
       spinSpeed: 0,
-      staticDrag: 0.001,
-      dynamicDrag: 0.1,
+      staticDrag: 0.0004,
+      dynamicDrag: 0.01,
     },
-    upgrades: {},
+    upgrades: {
+      choices: [0],
+      clickPower: 0.05,
+    },
   };
 }
 

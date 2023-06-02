@@ -30,10 +30,12 @@ import {
   getSpinQuaternion,
   makeSpin,
 } from "@/math/rotation";
+import { addCurrencyWithMultipliers } from "@/currency/currency";
 
 export class Cube {
   group: Group;
   spin: Spin = makeSpin();
+  lastFaceClicked = "";
 
   constructor() {
     this.group = new Group();
@@ -132,7 +134,7 @@ export class Cube {
   private applyForceToCube(position: Vector3) {
     // NOTE: cube is centered at origin
     // NOTE: Z axis goes into the screen, Y is up
-    const spinFactor = 0.01;
+    const spinFactor = stateManager.state.upgrades.clickPower;
 
     this.spin = combineSpin(this.spin, {
       direction: new Vector2(position.x, position.y).multiplyScalar(spinFactor),
@@ -161,6 +163,18 @@ export class Cube {
       .normalize();
   }
 
+  modifyCombo(faceClicked: string) {
+    if (!stateManager.state.upgrades.combo) {
+      return;
+    }
+    if (this.lastFaceClicked == faceClicked) {
+      stateManager.state.upgrades.combo.totalCombo += 1;
+    } else {
+      stateManager.state.upgrades.combo.totalCombo = 0;
+    }
+    this.lastFaceClicked = faceClicked;
+  }
+
   raycastCube(normalizedPosition: Vector2, camera: Camera): void {
     const raycaster = new Raycaster();
     raycaster.setFromCamera(normalizedPosition, camera);
@@ -170,22 +184,13 @@ export class Cube {
       const name = intersects[0].object.name;
       switch (name) {
         case "red":
-          stateManager.state.currency.red += 1;
-          break;
         case "blue":
-          stateManager.state.currency.blue += 1;
-          break;
         case "green":
-          stateManager.state.currency.green += 1;
-          break;
         case "yellow":
-          stateManager.state.currency.yellow += 1;
-          break;
         case "white":
-          stateManager.state.currency.white += 1;
-          break;
         case "black":
-          stateManager.state.currency.black += 1;
+          this.modifyCombo(name);
+          addCurrencyWithMultipliers(name);
           break;
         default:
           console.error("unsupported raycast type");

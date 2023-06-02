@@ -8,7 +8,7 @@
     id="main"
   >
     <v-card-title> Resources </v-card-title>
-    <v-row v-for="(amount, resource) in resources">
+    <v-row v-for="(amount, resource) in resources" :key="resource">
       <v-col> {{ resource }}: </v-col>
       <v-col>
         {{ amount }}
@@ -20,8 +20,8 @@
         {{ speed.toFixed(3) }}
       </v-col>
     </v-row>
-    <v-text-field v-model="staticDrag" />
-    <v-text-field v-model="dynamicDrag" />
+    <v-text-field v-model="staticDrag" disabled />
+    <v-text-field v-model="dynamicDrag" disabled />
   </v-card>
 </template>
 

@@ -46,7 +46,7 @@ export class Renderer {
     document.body.appendChild(this.renderer.domElement);
 
     // Configure renderer clear color
-    this.renderer.setClearColor("#ffffff");
+    this.renderer.setClearColor("#aaddff");
 
     // Configure renderer size
     this.renderer.setSize(window.innerWidth, window.innerHeight);
