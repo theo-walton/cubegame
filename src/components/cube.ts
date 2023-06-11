@@ -151,19 +151,38 @@ export class Cube {
     });
   }
 
-  debugCubeAxis() {
-    const quat = this.cubeGroup.quaternion;
-    const points = [];
-    const quat2 = getSpinQuaternion(this.spin);
-    points.push( new Vector3( 0, 0, 0 ) );
-    points.push( new Vector3( Math.abs(quat.x), Math.abs(quat.y), Math.abs(quat.z) ).multiplyScalar(100) );
-    points.push( new Vector3( 0, 0, 0 ) );
-    points.push( new Vector3( Math.abs(quat2.x), Math.abs(quat2.y), Math.abs(quat2.z) ).multiplyScalar(100) );
-    const geometry = new BufferGeometry().setFromPoints( points );
-    const material = new LineBasicMaterial( { color: 0x0000ff } );
-    const line = new Line( geometry, material );
-    this.debugGroup.remove(this.debugGroup.children[0]);
-    this.debugGroup.add(line);
+  scoreAlignmentFix(baseRotation: Quaternion, spinRotation: Quaternion, fix: Quaternion): number {
+    const newBase = new Quaternion().multiply(fix).multiply(baseRotation);
+    const invertBase = newBase.clone().invert();
+    const result = new Quaternion().multiply(invertBase).multiply(spinRotation).multiply(newBase);
+    const axis = new Vector3(result.x, result.y, result.z).normalize();
+    const score = Math.max(Math.abs(axis.x), Math.abs(axis.y), Math.abs(axis.z));
+    return score;
+  }
+
+  align(baseRotation: Quaternion, spinRotation: Quaternion, inverseBase: Quaternion) {
+    const result = new Quaternion().multiply(inverseBase).multiply(spinRotation).multiply(baseRotation);
+    const axis = new Vector3(result.x, result.y, result.z).normalize();
+    const score = Math.max(Math.abs(axis.x), Math.abs(axis.y), Math.abs(axis.z));
+    console.log("main", score);
+
+    if (score < 0.98 || score > 0.99999) {
+      return;
+    } 
+    const improvements = [
+      new Quaternion().setFromAxisAngle(new Vector3(0, 0, 1), 0.001),
+      new Quaternion().setFromAxisAngle(new Vector3(0, 0, 1), -0.001),
+    ];
+    for (const improvement of improvements) {
+      const newScore = this.scoreAlignmentFix(baseRotation, spinRotation, improvement);
+      if (newScore > score) {
+        this.cubeGroup.quaternion
+          .copy(improvement.multiply(this.cubeGroup.quaternion))
+          .normalize();
+        return;
+      }
+    }
+
   }
 
   // TODO: make this based on frame rate?
@@ -188,12 +207,8 @@ export class Cube {
       .copy(rotation.multiply(this.cubeGroup.quaternion))
       .normalize();
 
-    const regular = this.cubeGroup.quaternion;
     const invert = this.cubeGroup.quaternion.clone().invert();
-    const result = new Quaternion().multiply(invert).multiply(rclone).multiply(regular);
-    console.log(result.x.toPrecision(2), result.y.toPrecision(2), result.z.toPrecision(2));
-
-    // this.debugCubeAxis();
+    this.align(this.cubeGroup.quaternion, rclone, invert);
   }
 
   modifyCombo(faceClicked: string) {
