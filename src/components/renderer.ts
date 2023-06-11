@@ -21,6 +21,7 @@ import {
   RGBAFormat,
   LinearEncoding,
   LinearFilter,
+  FloatType,
 } from "three";
 import { TextureToScene } from "@/components/postprocess/noChange";
 import { MotionBlur } from "@/components/postprocess/motionBlur";
@@ -65,6 +66,7 @@ export class Renderer {
       magFilter: LinearFilter,
       format: RGBAFormat,
       encoding: LinearEncoding,
+      type: FloatType,
     };
 
     this.renderTarget = new WebGLRenderTarget(

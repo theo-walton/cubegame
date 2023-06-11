@@ -11,12 +11,7 @@ interface Primitives {
 }
 
 interface Currency {
-  red: number;
-  blue: number;
-  green: number;
-  yellow: number;
-  white: number;
-  black: number;
+  cubePoints: number;
 }
 
 interface CubeProperties {
@@ -35,6 +30,7 @@ interface SpeedBonus {
 
 interface Upgrades {
   choices: number[];
+  current: string[];
   clickPower: number;
   combo?: Combo;
   speedBonus?: SpeedBonus;
@@ -49,12 +45,7 @@ export interface State {
 function defaultState(): State {
   return {
     currency: {
-      red: 0,
-      blue: 0,
-      green: 0,
-      yellow: 0,
-      white: 0,
-      black: 0,
+      cubePoints: 0,
     },
     cubeProperties: {
       spinSpeed: 0,
@@ -63,6 +54,7 @@ function defaultState(): State {
     },
     upgrades: {
       choices: [0],
+      current: [],
       clickPower: 0.05,
     },
   };

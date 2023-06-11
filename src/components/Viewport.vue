@@ -73,7 +73,8 @@ export default class Viewport extends Vue {
 
     this.cube = new Cube();
 
-    this.scene.add(this.cube.group);
+    this.scene.add(this.cube.cubeGroup);
+    this.scene.add(this.cube.debugGroup);
     console.log(this.scene);
   }
 

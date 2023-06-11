@@ -9,7 +9,7 @@
         style="background-color: orange"
         width="300px"
       >
-        {{ `cost: ${item.cost} ${item.currency}` }}
+        {{ `cost: ${item.cost}` }}
       </v-list-item>
     </div>
   </div>
@@ -17,36 +17,38 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { Upgrade } from "@/components/upgrades/upgrade_types";
+import { UpgradeWithCost, Upgrade } from "@/components/upgrades/upgrade_types";
 import stateManager from "@/store/state";
 import {
   getUpgradeChoices,
   refreshUpgradeChoices,
 } from "@/components/upgrades/possible_upgrades";
+import { getUpgradeCost } from "@/components/upgrades/cost";
 
 @Options({})
 export default class MainUI extends Vue {
-  get upgradeDisplay(): Upgrade[] {
+  get upgradeDisplay(): UpgradeWithCost[] {
     return getUpgradeChoices().map((choice) => {
       return {
         ...choice,
-        cost: 1,
+        cost: getUpgradeCost(choice),
         currency: "red",
       };
     });
   }
 
-  performUpgrade(upgrade: Upgrade) {
-    const amount = stateManager.state.currency[upgrade.currency];
+  performUpgrade(upgrade: UpgradeWithCost) {
+    const amount = stateManager.state.currency.cubePoints;
     if (amount >= upgrade.cost) {
       upgrade.action();
-      stateManager.state.currency[upgrade.currency] -= upgrade.cost;
+      stateManager.state.currency.cubePoints -= upgrade.cost;
+      stateManager.state.upgrades.current.push(upgrade.name);
       refreshUpgradeChoices();
     }
   }
 
-  canAfford(upgrade: Upgrade) {
-    return stateManager.state.currency[upgrade.currency] >= upgrade.cost;
+  canAfford(upgrade: UpgradeWithCost) {
+    return stateManager.state.currency.cubePoints >= upgrade.cost;
   }
 }
 </script>

@@ -1,10 +1,6 @@
 import { sampleSize } from "lodash";
 import stateManager from "@/store/state";
-
-interface Upgrade {
-  name: string;
-  action: () => void;
-}
+import { Upgrade } from "./upgrade_types";
 
 const upgrades = [
   {

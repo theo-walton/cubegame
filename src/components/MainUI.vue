@@ -20,8 +20,8 @@
         {{ speed.toFixed(3) }}
       </v-col>
     </v-row>
-    <v-text-field v-model="staticDrag" disabled />
-    <v-text-field v-model="dynamicDrag" disabled />
+    <v-text-field v-model="staticDrag" />
+    <v-text-field v-model="dynamicDrag" />
   </v-card>
 </template>
 

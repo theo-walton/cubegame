@@ -2,7 +2,7 @@ import stateManager, { State } from "@/store/state";
 
 type CurrencyNames = keyof State["currency"];
 
-export function addCurrencyWithMultipliers(currencyName: CurrencyNames) {
+export function addCubePointsWithMultipliers() {
   let base = 1;
   if (stateManager.state.upgrades.speedBonus) {
     base +=
@@ -12,5 +12,5 @@ export function addCurrencyWithMultipliers(currencyName: CurrencyNames) {
 
   const combo = stateManager.state.upgrades?.combo?.totalCombo || 1;
   const multiplier = Math.sqrt(combo);
-  stateManager.state.currency[currencyName] += Math.round(multiplier * base);
+  stateManager.state.currency.cubePoints += Math.round(multiplier * base);
 }
