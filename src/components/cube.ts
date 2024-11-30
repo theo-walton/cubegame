@@ -187,15 +187,15 @@ export class Cube {
 
   // TODO: make this based on frame rate?
   tick() {
-    this.spin = applyStaticDrag(
-      this.spin,
-      stateManager.state.cubeProperties.staticDrag
-    );
+    // this.spin = applyStaticDrag(
+    //   this.spin,
+    //   stateManager.state.cubeProperties.staticDrag
+    // );
 
-    this.spin = applyDynamicDrag(
-      this.spin,
-      stateManager.state.cubeProperties.dynamicDrag
-    );
+    // this.spin = applyDynamicDrag(
+    //   this.spin,
+    //   stateManager.state.cubeProperties.dynamicDrag
+    // );
 
     stateManager.state.cubeProperties.spinSpeed = this.spin.direction.length();
 
@@ -231,7 +231,7 @@ export class Cube {
     }
     const oldColor = material.color;
     const hsl = oldColor.getHSL({ h: 0, s: 0, l: 0});
-    hsl.s -= 0.1;
+    hsl.s -= 0.01;
     const newColor = new Color().setHSL(hsl.h, hsl.s, hsl.l);
     material.color = newColor;
     console.log(hsl);
@@ -251,9 +251,9 @@ export class Cube {
         case "yellow":
         case "white":
         case "black":
-          // this.saturateFace(name);
-          this.modifyCombo(name);
-          addCubePointsWithMultipliers();
+          this.saturateFace(name);
+          // this.modifyCombo(name);
+          // addCubePointsWithMultipliers();
           break;
         default:
           console.error("unsupported raycast type");

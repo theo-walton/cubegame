@@ -1,7 +1,7 @@
 <template>
   <div>
-    <UpgradeUI />
-    <MainUI />
+    <!-- <UpgradeUI />
+    <MainUI /> -->
     <Viewport />
   </div>
 </template>
